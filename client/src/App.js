@@ -9,43 +9,46 @@ import Home from './Home';
 import SuperheroPage from './SuperheroPage';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
-import HerosContext from './HerosContext';
+import StateContext from './StateContext';
+import DispatchContext from './DispatchContext';
 
 function App() {
-  const { state } = useSuperheros();
+  const { state, dispatch } = useSuperheros();
 
   return (
     <div className="App">
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
+      <DispatchContext.Provider value={dispatch}>
+        <StateContext.Provider value={state}>
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
 
-          <Route path="/login">
-            <Login />
-          </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
 
-          <PrivateRoute exact path="/superheros">
-            <HerosContext.Provider value={state.superheros}>
-              <Superheros loading={state.loading} />
-            </HerosContext.Provider> 
-          </PrivateRoute>
+              <PrivateRoute exact path="/superheros">
+                <Superheros loading={state.loading} />
+              </PrivateRoute>
 
-          <Route path="/superheros/:id">
-            <SuperheroPage superheros={state.superheros} />
-          </Route>
+              <Route path="/superheros/:id">
+                <SuperheroPage superheros={state.superheros} />
+              </Route>
 
-          <PrivateRoute path="/search">
-            <Search />
-          </PrivateRoute>
+              <PrivateRoute path="/search">
+                <Search />
+              </PrivateRoute>
 
-          <Route path="*">
-            <h1>404 - Path not found</h1>
-          </Route>
-        </Switch>
-      </Router>
+              <Route path="*">
+                <h1>404 - Path not found</h1>
+              </Route>
+            </Switch>
+          </Router>
+        </StateContext.Provider>
+      </DispatchContext.Provider>
     </div>
   );
 }

@@ -26,7 +26,7 @@ const useSuperheros = () => {
       .catch((err) => console.log(err.message));
   }, []);
 
-  return { state };
+  return { state, dispatch };
 };
 
 export default useSuperheros;
