@@ -4,9 +4,13 @@ import './Superheros.scss';
 import StateContext from './StateContext';
 
 export default function Superheros({ loading }) {
-  const { state } = useContext(StateContext);
+  const state = useContext(StateContext);
 
-  if (loading) {
+  if (!state) {
+    return null;
+  }
+
+  if (state.loading) {
     return <h3>Loading...</h3>;
   }
 
@@ -14,7 +18,7 @@ export default function Superheros({ loading }) {
     <>
       <h1>Superheros</h1>
       <ul className="superheros">
-        {state.superheros.map((superhero) => (
+        {state && state.superheros.map((superhero) => (
           <Superhero key={superhero.id} {...superhero} />
         ))}
       </ul>
