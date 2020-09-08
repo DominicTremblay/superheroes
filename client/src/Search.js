@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import useSearch from './hooks/useSearch';
 import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import './Search.scss';
+import { ADD_SUPERHERO } from './reducers/dataReducer';
+import DispatchContext from './DispatchContext';
 
 export default function Search() {
   const [searchContent, setSearchContent] = useState('');
+
+  const dispatch = useContext(DispatchContext);
 
   const history = useHistory();
 
@@ -16,9 +20,6 @@ export default function Search() {
 
   const SearchResult = ({ name }) => {
     const { heroDetails, loading, error } = useSearch(name);
-    console.log('Search Result');
-
-    console.log('Hero Details', heroDetails);
 
     return (
       <div>
@@ -28,7 +29,16 @@ export default function Search() {
           <div className="search-result">
             <ul>
               {heroDetails.results.map((hero) => (
-                <li key={hero.id}>{hero.name}</li>
+                <li key={hero.id}>
+                  {hero.name}{' '}
+                  <button
+                    onClick={() =>
+                      dispatch({ type: ADD_SUPERHERO, superhero: hero })
+                    }
+                  >
+                    Add to List
+                  </button>
+                </li>
               ))}
             </ul>
           </div>
